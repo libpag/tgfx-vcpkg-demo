@@ -1,0 +1,30 @@
+{
+  "name": "tgfx",
+  "version-string": "v2.1.0",
+  "description": "A lightweight 2D graphics library for rendering texts, geometries, and images with high-performance APIs that work across various platforms.",
+  "homepage": "https://github.com/Tencent/tgfx",
+  "license": "BSD-3-Clause",
+  "dependencies": [
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-config",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-get-vars",
+      "host": true
+    },
+    {
+      "name": "vcpkg-tool-nodejs",
+      "host": true
+    },
+    {
+      "name": "vcpkg-tool-ninja",
+      "host": true
+    }
+  ],
+  "supports": "!uwp"
+}

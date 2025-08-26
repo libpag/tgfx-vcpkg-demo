@@ -1,0 +1,8 @@
+{
+  "name": "demo",
+  "version": "1.0.0",
+  "description": "A demo project using TGFX library with vcpkg",
+  "dependencies": [
+    "tgfx"
+  ]
+}
