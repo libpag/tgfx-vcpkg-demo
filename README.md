@@ -10,48 +10,13 @@ This project provides:
 - Cross-platform build configuration (macOS, Windows, Linux, Android, iOS, OpenHarmony)
 - Comprehensive integration guide
 
-## Installing vcpkg
+## CLion Build (macOS)
 
-### 1. Download and Install vcpkg
+### 1. CLion with Vcpkg integration
 
-Please refer to the official vcpkg installation guide: https://vcpkg.io/en/getting-started.html
+Please refer to the official CLion documentation for configuring vcpkg integration: https://www.jetbrains.com/help/clion/package-management.html
 
-**macOS/Linux:**
-```bash
-git clone https://github.com/Microsoft/vcpkg.git
-cd vcpkg
-./bootstrap-vcpkg.sh
-```
-
-**Windows:**
-```cmd
-git clone https://github.com/Microsoft/vcpkg.git
-cd vcpkg
-.\bootstrap-vcpkg.bat
-```
-
-## Running the Demo with CLion (macOS)
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/libpag/tgfx-vcpkg-demo.git
-cd tgfx-vcpkg-demo
-```
-
-### 2. Configure CLion
-
-1. Open CLion and select "Open" to open the project directory
-2. Navigate to `Settings/Preferences` → `Build, Execution, Deployment` → `CMake`
-3. Add the following parameter to `CMake options`:
-
-```
--DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake
-```
-
-**Note:** Replace `/path/to/vcpkg` with your actual vcpkg installation path.
-
-### 3. Build and Run
+### 2. Build and Run
 
 1. CLion will automatically detect CMakeLists.txt and begin configuration
 2. Wait for vcpkg to download and build TGFX dependencies (initial build may take considerable time)
@@ -59,7 +24,11 @@ cd tgfx-vcpkg-demo
 
 ## Command Line Build
 
-### macOS/Linux
+### Download and Install vcpkg
+
+Please refer to the official vcpkg installation guide: https://vcpkg.io/en/getting-started.html
+
+### Build on macOS/Linux
 
 ```bash
 # Create build directory
@@ -75,7 +44,7 @@ cmake --build .
 ./demo
 ```
 
-### Windows
+### Build on Windows
 
 ```cmd
 # Create build directory
