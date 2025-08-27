@@ -1,5 +1,4 @@
 #include <iostream>
-#include <memory>
 #include <fstream>
 #include "tgfx/core/Surface.h"
 #include "tgfx/core/Canvas.h"
