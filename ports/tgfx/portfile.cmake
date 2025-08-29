@@ -53,6 +53,11 @@ file(INSTALL "${SOURCE_PATH}/include/"
 file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/include")
 file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/share")
 
+# 创建并安装CMake配置文件
+configure_file("${CMAKE_CURRENT_LIST_DIR}/tgfx-config.cmake.in"
+               "${CURRENT_PACKAGES_DIR}/share/${PORT}/tgfx-config.cmake"
+               @ONLY)
+
 # 安装使用说明
 file(INSTALL "${CMAKE_CURRENT_LIST_DIR}/usage"
         DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}")
