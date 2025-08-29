@@ -2,6 +2,22 @@
 
 This repository demonstrates how to integrate the TGFX graphics library using vcpkg for offline dependency management. TGFX is Tencent's open-source lightweight 2D graphics library that provides high-performance cross-platform rendering for text, geometries, and images.
 
+## TGFX vcpkg Integration Approach
+
+**Important Note:** This project uses a special approach for TGFX integration with vcpkg that differs from standard vcpkg usage:
+
+- **vcpkg Role**: Used solely for fetching TGFX source code, not for dependency management
+- **Third-party Dependencies**: Managed using the [depsync](https://github.com/domchen/depsync) tool instead of vcpkg
+- **Build System**: TGFX and its dependencies are compiled using the [vendor_tools](https://github.com/libpag/vendor_tools) build system
+
+This hybrid approach allows us to leverage vcpkg's source management capabilities while maintaining control over the dependency resolution and build process through specialized tools designed for TGFX's requirements.
+
+**Future Plans**: We are considering full vcpkg adaptation in future releases to provide a more standardized integration experience.
+
+### Related Tools
+- [vendor_tools](https://github.com/libpag/vendor_tools) - Build system for TGFX and dependencies
+- [depsync](https://github.com/domchen/depsync) - Dependency synchronization tool
+
 ## CLion Build (macOS)
 
 ### 1. CLion with Vcpkg integration
