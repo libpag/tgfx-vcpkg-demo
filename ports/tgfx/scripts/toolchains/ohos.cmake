@@ -1,6 +1,5 @@
 include("${CMAKE_CURRENT_LIST_DIR}/../../ohos-ndk-finder.cmake")
 
-# 设置 HarmonyOS 平台标识
 set(CMAKE_SYSTEM_NAME OHOS CACHE STRING "")
 set(OHOS_PLATFORM OHOS CACHE STRING "")
 
@@ -8,7 +7,6 @@ set(NDK_PATH "")
 set(NDK_VERSION "")
 find_ohos_ndk(NDK_PATH NDK_VERSION)
 
-# 验证 NDK 工具链文件
 if(NOT EXISTS "${NDK_PATH}/build/cmake/ohos.toolchain.cmake")
     message(FATAL_ERROR "Could not find OHOS toolchain at ${NDK_PATH}/build/cmake/ohos.toolchain.cmake")
 endif()
@@ -25,10 +23,7 @@ else()
     message(FATAL_ERROR "Unknown ABI for target triplet ${VCPKG_TARGET_TRIPLET}")
 endif()
 
-# 设置环境变量供 OHOS 工具链使用
 set(ENV{CMAKE_OHOS_NDK} ${NDK_PATH})
-
-# 包含 HarmonyOS NDK 的官方工具链（使用正确的路径）
 include("${NDK_PATH}/build/cmake/ohos.toolchain.cmake")
 
 if(NOT _VCPKG_OHOS_TOOLCHAIN)
