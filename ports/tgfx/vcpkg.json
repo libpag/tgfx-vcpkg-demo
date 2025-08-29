@@ -20,10 +20,6 @@
     {
       "name": "vcpkg-tool-nodejs",
       "host": true
-    },
-    {
-      "name": "vcpkg-tool-ninja",
-      "host": true
     }
   ],
   "supports": "!uwp"
