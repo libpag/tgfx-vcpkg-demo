@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TGFX vcpkg Demo</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #2c3e50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        #tgfx-canvas {
+            display: block;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="tgfx-canvas" width="800" height="600"></canvas>
+
+    <script type="module">
+        let tgfxView = null;
+        const canvas = document.getElementById('tgfx-canvas');
+        
+        async function initTGFX() {
+            try {
+                // Set canvas properties
+                canvas.width = 800;
+                canvas.height = 600;
+                
+                // Test WebGL support
+                const webgl2Ctx = canvas.getContext('webgl2');
+                const webglCtx = canvas.getContext('webgl');
+                
+                if (!webgl2Ctx && !webglCtx) {
+                    throw new Error('WebGL is not supported in this browser');
+                }
+                
+                // Dynamically import WASM module
+                const TGFXWebDemo = await import('../build/tgfx-web-demo.js');
+                const tgfxModule = await TGFXWebDemo.default();
+                
+                // Create TGFX view
+                tgfxView = tgfxModule.TGFXView.MakeFrom('#tgfx-canvas');
+                
+                if (!tgfxView) {
+                    throw new Error('Failed to create TGFX view');
+                }
+                
+                // Update canvas size and draw
+                const devicePixelRatio = window.devicePixelRatio || 1;
+                tgfxView.updateSize(devicePixelRatio);
+                tgfxView.draw();
+                
+            } catch (error) {
+                console.error('Failed to initialize TGFX:', error);
+            }
+        }
+        
+        // Update canvas on window resize
+        window.addEventListener('resize', () => {
+            if (tgfxView) {
+                const devicePixelRatio = window.devicePixelRatio || 1;
+                tgfxView.updateSize(devicePixelRatio);
+                tgfxView.draw();
+            }
+        });
+        
+        // Initialize
+        initTGFX();
+    </script>
+</body>
+</html>

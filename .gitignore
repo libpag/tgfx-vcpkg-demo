@@ -18,6 +18,9 @@ Makefile
 # vcpkg
 vcpkg_installed/
 
+# npm
+node_modules/
+
 # OS generated files
 .DS_Store
 .DS_Store?
