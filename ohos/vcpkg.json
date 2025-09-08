@@ -1,0 +1,8 @@
+{
+  "name": "tgfx-ohos-demo",
+  "version": "1.0.0",
+  "description": "A demo project using TGFX library with vcpkg for OpenHarmony",
+  "dependencies": [
+    "tgfx"
+  ]
+}

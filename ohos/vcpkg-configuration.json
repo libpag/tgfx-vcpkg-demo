@@ -1,0 +1,6 @@
+{
+  "overlay-ports": [
+    "../ports"
+  ],
+  "overlay-triplets": [ "../ports/tgfx/triplets" ]
+}
