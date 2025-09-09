@@ -128,7 +128,7 @@ vcpkg install tgfx:arm64-ohos
 
 **Note:** By default, the OHOS demo uses ARM64 architecture. To build for x64 architecture instead:
 1. Install x64 TGFX: `vcpkg install tgfx:x64-ohos`
-2. Modify `ohos/demo/build-profile.json5` and change `"abiFilters": ["arm64-v8a"]` to `"abiFilters": ["x86_64"]`
+2. Modify `ohos/demo/build-profile.json5` and change `"abiFilters": ["arm64-v8a"]` to `"abiFilters": ["x86-64"]`
 
 #### Building with DevEco Studio
 
