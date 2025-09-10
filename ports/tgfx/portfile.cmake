@@ -33,7 +33,7 @@ if(NOT NODEJS)
 endif()
 
 find_program(NPM
-    NAMES npm
+    NAMES npm.cmd npm
     PATHS
         "${CURRENT_HOST_INSTALLED_DIR}/tools/node"
         "${CURRENT_HOST_INSTALLED_DIR}/tools/node/bin"
