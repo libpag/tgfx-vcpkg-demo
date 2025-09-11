@@ -46,7 +46,7 @@ endif()
 
 message(STATUS "Installing depsync via npm...")
 vcpkg_execute_required_process(
-    COMMAND ${NPM} install depsync
+    COMMAND ${NPM} install depsync -g
     WORKING_DIRECTORY "${SOURCE_PATH}"
     LOGNAME "npm-install-depsync"
 )

@@ -29,7 +29,23 @@ if (APPLE)
     list(APPEND TGFX_COMPILE_DEFINITIONS GL_SILENCE_DEPRECATION)
     
 elseif (WIN32)
-    list(APPEND TGFX_SYSTEM_LIBS Bcrypt ws2_32 DWrite opengl32)
+    list(APPEND TGFX_SYSTEM_LIBS 
+        Bcrypt 
+        ws2_32 
+        DWrite 
+        opengl32
+        kernel32
+        user32
+        gdi32
+        winspool
+        shell32
+        ole32
+        oleaut32
+        uuid
+        comdlg32
+        advapi32
+        synchronization
+    )
     
     list(APPEND TGFX_COMPILE_DEFINITIONS
         NOMINMAX 
@@ -49,6 +65,15 @@ elseif (WIN32)
     
     if (MSVC)
         list(APPEND TGFX_COMPILE_OPTIONS "/utf-8")
+        
+        # Force consistent runtime library usage
+        if (CMAKE_BUILD_TYPE MATCHES "Debug")
+            set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDebugDLL")
+            list(APPEND TGFX_COMPILE_DEFINITIONS _ITERATOR_DEBUG_LEVEL=2)
+        else()
+            set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
+            list(APPEND TGFX_COMPILE_DEFINITIONS _ITERATOR_DEBUG_LEVEL=0)
+        endif()
     endif()
     
 elseif (CMAKE_HOST_SYSTEM_NAME MATCHES "Linux")
