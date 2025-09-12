@@ -15,9 +15,6 @@ if(NOT DEFINED TGFX_GIT_EXECUTABLE)
         
         set(COMBINED_PATH "${ORIGINAL_PATH};${FULL_SYSTEM_PATH}")
         set(ENV{PATH} "${COMBINED_PATH}")
-
-        message(STATUS "--------Combined PATH: ${COMBINED_PATH}----------")
-
     endif()
 endif()
 

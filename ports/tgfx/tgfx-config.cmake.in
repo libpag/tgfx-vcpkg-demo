@@ -27,55 +27,6 @@ if (APPLE)
     )
     
     list(APPEND TGFX_COMPILE_DEFINITIONS GL_SILENCE_DEPRECATION)
-    
-elseif (WIN32)
-    list(APPEND TGFX_SYSTEM_LIBS 
-        Bcrypt 
-        ws2_32 
-        DWrite 
-        opengl32
-        kernel32
-        user32
-        gdi32
-        winspool
-        shell32
-        ole32
-        oleaut32
-        uuid
-        comdlg32
-        advapi32
-        synchronization
-    )
-    
-    list(APPEND TGFX_COMPILE_DEFINITIONS
-        NOMINMAX 
-        _USE_MATH_DEFINES 
-        WIN32 
-        _WINDOWS 
-        _CRT_SECURE_NO_WARNINGS
-    )
-    
-    if (${CMAKE_SYSTEM_VERSION} VERSION_GREATER_EQUAL 6.3)
-        list(APPEND TGFX_COMPILE_DEFINITIONS _WIN32_WINNT=0x0603)
-        list(APPEND TGFX_SYSTEM_LIBS SHCore)
-    else()
-        list(APPEND TGFX_COMPILE_DEFINITIONS _WIN32_WINNT=0x0601)
-        list(APPEND TGFX_SYSTEM_LIBS user32)
-    endif()
-    
-    if (MSVC)
-        list(APPEND TGFX_COMPILE_OPTIONS "/utf-8")
-        
-        # Force consistent runtime library usage
-        if (CMAKE_BUILD_TYPE MATCHES "Debug")
-            set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDebugDLL")
-            list(APPEND TGFX_COMPILE_DEFINITIONS _ITERATOR_DEBUG_LEVEL=2)
-        else()
-            set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
-            list(APPEND TGFX_COMPILE_DEFINITIONS _ITERATOR_DEBUG_LEVEL=0)
-        endif()
-    endif()
-    
 elseif (CMAKE_HOST_SYSTEM_NAME MATCHES "Linux")
     find_package(Threads REQUIRED)
     list(APPEND TGFX_SYSTEM_LIBS ${CMAKE_THREAD_LIBS_INIT})
@@ -124,9 +75,5 @@ if(NOT TARGET tgfx::tgfx)
         )
     endif()
 endif()
-
-set(TGFX_FOUND TRUE)
-set(TGFX_INCLUDE_DIRS "${_IMPORT_PREFIX}/include")
-set(TGFX_LIBRARIES tgfx::tgfx)
 
 check_required_components(tgfx)
