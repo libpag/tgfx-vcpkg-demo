@@ -26,7 +26,7 @@ if (APPLE)
         ${CORE_MEDIA}
     )
     
-    list(APPEND TGFX_COMPILE_DEFINITIONS GL_SILENCE_DEPRECATION)
+    list(APPEND TGFX_COMPILE_DEFINITIONS GL_SILENCE_DEPRECATION) 
 elseif (CMAKE_HOST_SYSTEM_NAME MATCHES "Linux")
     find_package(Threads REQUIRED)
     list(APPEND TGFX_SYSTEM_LIBS ${CMAKE_THREAD_LIBS_INIT})
@@ -75,5 +75,9 @@ if(NOT TARGET tgfx::tgfx)
         )
     endif()
 endif()
+
+set(TGFX_FOUND TRUE)
+set(TGFX_INCLUDE_DIRS "${_IMPORT_PREFIX}/include")
+set(TGFX_LIBRARIES tgfx::tgfx)
 
 check_required_components(tgfx)

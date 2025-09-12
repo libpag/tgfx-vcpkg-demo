@@ -55,13 +55,7 @@ cmake --build .
 
 ### Windows Platform
 
-**Prerequisites:** Install TGFX using vcpkg in the project root directory:
-```cmd
-:: In the project root directory
-vcpkg install
-```
-
-#### Command Line Build
+#### Visual Studio Build
 
 ```cmd
 :: Create build directory
@@ -69,14 +63,17 @@ mkdir build
 cd build
 
 :: Configure CMake (replace with your vcpkg path)
+:: This command will automatically download and install vcpkg third-party libraries
 cmake .. -DCMAKE_TOOLCHAIN_FILE=C:\path\to\vcpkg\scripts\buildsystems\vcpkg.cmake
 
-:: Build project
-cmake --build .
-
-:: Run demo
-.\Debug\demo.exe
+:: Optional: Specify architecture and build type
+:: cmake .. -DCMAKE_TOOLCHAIN_FILE=C:\path\to\vcpkg\scripts\buildsystems\vcpkg.cmake -A x64 -DCMAKE_BUILD_TYPE=Release
+:: cmake .. -DCMAKE_TOOLCHAIN_FILE=C:\path\to\vcpkg\scripts\buildsystems\vcpkg.cmake -A Win32 -DCMAKE_BUILD_TYPE=Debug
 ```
+
+**Important:** Ensure that the Visual Studio toolchain used to build TGFX matches the toolchain used to build the Windows demo. Mismatched toolchains will result in linking errors.
+
+After running the cmake command, a `demo.sln` solution file will be generated. Open this file in Visual Studio and build the project to generate the executable file.
 
 ### Web Platform
 
@@ -84,7 +81,7 @@ cmake --build .
 ```bash
 # Navigate to web directory and install TGFX
 cd web
-vcpkg install tgfx:wasm32-emscripten
+vcpkg install --triplet=wasm32-emscripten
 ```
 
 **Note:** By default, TGFX builds with multi-threading support (wasm-mt). To build single-threaded TGFX instead, modify `ports/tgfx/tgfx-functions.cmake` line 38 from `set(ARCH "wasm-mt")` to `set(ARCH "wasm")` before running `vcpkg install`.
@@ -122,12 +119,12 @@ Open your browser and navigate to `http://localhost:3000` to view the demo.
 ```bash
 # Navigate to OHOS directory and install TGFX
 cd ohos
-vcpkg install tgfx:arm64-ohos
+vcpkg install --triplet=arm64-ohos
 # Using "vcpkg install tgfx:x64-ohos" for x64 architecture
 ```
 
 **Note:** By default, the OHOS demo uses ARM64 architecture. To build for x64 architecture instead:
-1. Install x64 TGFX: `vcpkg install tgfx:x64-ohos`
+1. Install x64 TGFX: `vcpkg install --triplet=x64-ohos`
 2. Modify `ohos/demo/build-profile.json5` and change `"abiFilters": ["arm64-v8a"]` to `"abiFilters": ["x86-64"]`
 
 #### Building with DevEco Studio

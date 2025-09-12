@@ -78,7 +78,7 @@ try {
     console.log(`Architecture: ${arch}`);
     console.log(`Mode: ${buildType}`);
     console.log(`Files: build/tgfx-web-demo.js, build/tgfx-web-demo.wasm`);
-    console.log('Run: npm run serve:mt');
+    console.log('Run: npm run server:mt');
     console.log('Access: http://localhost:3001');
 
 } catch (error) {

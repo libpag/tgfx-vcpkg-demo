@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "TGFX Web Demo for Emscripten",
   "dependencies": [
-    "tgfx"
+    {
+      "name": "tgfx"
+    }
   ]
 }
