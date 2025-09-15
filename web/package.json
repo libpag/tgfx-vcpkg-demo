@@ -4,7 +4,7 @@
   "description": "TGFX Web Demo using vcpkg",
   "main": "server.js",
   "scripts": {
-    "clean": "rm -rf build dist demo/build",
+    "clean": "node -e \"const fs=require('fs'); ['build','dist','demo/build'].forEach(d=>{if(fs.existsSync(d))fs.rmSync(d,{recursive:true,force:true})})\"",
     "build": "node build.js --arch=wasm-mt",
     "build:st": "node build.js --arch=wasm",
     "build:mt": "node build.js --arch=wasm-mt",

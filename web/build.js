@@ -100,7 +100,44 @@ function findNodeExecutable() {
 
 const nodeExecutable = findNodeExecutable();
 
+// Detect available CMake generator for Windows
+function detectCMakeGenerator() {
+    if (process.platform !== 'win32') {
+        return 'Unix Makefiles'; // Default for Unix systems
+    }
+    
+    // Try to detect available generators on Windows
+    try {
+        // Check for Ninja
+        execSync('ninja --version', { stdio: 'ignore' });
+        console.log('Using Ninja generator');
+        return 'Ninja';
+    } catch (error) {
+        // Ninja not found, try MinGW
+        try {
+            execSync('mingw32-make --version', { stdio: 'ignore' });
+            console.log('Using MinGW Makefiles generator');
+            return 'MinGW Makefiles';
+        } catch (error) {
+            // Try MSYS Makefiles
+            try {
+                execSync('make --version', { stdio: 'ignore' });
+                console.log('Using MSYS Makefiles generator');
+                return 'MSYS Makefiles';
+            } catch (error) {
+                console.warn('Warning: No suitable make tool found. Please install Ninja or MinGW.');
+                console.warn('You can install Ninja via: npm install -g ninja-build');
+                console.warn('Or install MinGW from: https://www.mingw-w64.org/');
+                return 'Ninja'; // Default fallback
+            }
+        }
+    }
+}
+
+const generator = detectCMakeGenerator();
+
 const cmakeArgs = [
+    `-G "${generator}"`,
     `-DCMAKE_BUILD_TYPE=${buildType}`,
     `-DCMAKE_TOOLCHAIN_FILE="${emsdkPath}/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"`,
     `-DCMAKE_PREFIX_PATH="${VCPKG_DIR}"`,
@@ -116,7 +153,11 @@ try {
     });
 
     console.log('Building project...');
-    execSync(`emmake make -j${require('os').cpus().length}`, {
+    const buildCommand = generator === 'Ninja' ? 'ninja' : 
+                        generator === 'MinGW Makefiles' ? 'mingw32-make' :
+                        generator === 'MSYS Makefiles' ? 'make' : 'ninja';
+    
+    execSync(`emmake ${buildCommand} -j${require('os').cpus().length}`, {
         cwd: BUILD_DIR,
         stdio: 'inherit'
     });

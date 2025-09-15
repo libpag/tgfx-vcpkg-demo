@@ -32,6 +32,9 @@ if(NOT NODEJS)
     message(FATAL_ERROR "node not found! Please install it via your system package manager!")
 endif()
 
+get_filename_component(NODEJS_DIR "${NODEJS}" DIRECTORY )
+vcpkg_add_to_path(PREPEND "${NODEJS_DIR}")
+
 find_program(NPM
     NAMES npm.cmd npm
     PATHS
@@ -51,8 +54,19 @@ vcpkg_execute_required_process(
     LOGNAME "npm-install-depsync"
 )
 
-get_filename_component(NODEJS_DIR "${NODEJS}" DIRECTORY )
-vcpkg_add_to_path(PREPEND "${NODEJS_DIR}")
+find_program(NINJA
+        NAMES ninja
+        PATHS
+        "${CURRENT_HOST_INSTALLED_DIR}/tools/ninja"
+        ENV PATH
+        NO_DEFAULT_PATH
+)
+if(NOT NINJA)
+    message(FATAL_ERROR "ninja not found! Please install it via your system package manager!")
+endif()
+
+get_filename_component(NINJA_DIR "${NINJA}" DIRECTORY )
+vcpkg_add_to_path(PREPEND "${NINJA_DIR}")
 
 message(STATUS "Building TGFX using vendor_tools...")
 build_tgfx_with_vendor_tools("${SOURCE_PATH}" "${NODEJS}")
