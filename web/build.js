@@ -117,7 +117,7 @@ function findVcpkgNinja() {
     
     if (fs.existsSync(ninjaPath)) {
         console.log(`Using vcpkg ninja: ${ninjaPath}`);
-        return { generator: 'Ninja', ninjaPath };
+        return ninjaPath;
     }
     
     // Fallback: try to find ninja in any available triplet
@@ -131,19 +131,20 @@ function findVcpkgNinja() {
             const fallbackNinjaPath = path.join(vcpkgInstalledDir, fallbackTriplet, 'tools', 'ninja', ninjaExecutable);
             if (fs.existsSync(fallbackNinjaPath)) {
                 console.log(`Using vcpkg ninja from ${fallbackTriplet}: ${fallbackNinjaPath}`);
-                return { generator: 'Ninja', ninjaPath: fallbackNinjaPath };
+                return fallbackNinjaPath;
             }
         }
     }
     
     console.warn('Warning: vcpkg ninja not found, falling back to system ninja');
-    return { generator: 'Ninja', ninjaPath: 'ninja' };
+    return 'ninja';
 }
 
-const { generator, ninjaPath } = findVcpkgNinja();
+const ninjaPath = findVcpkgNinja();
 
 const cmakeArgs = [
-    `-G "${generator}"`,
+    `-G "Ninja"`,
+    `-DCMAKE_MAKE_PROGRAM="${ninjaPath}"`,
     `-DCMAKE_BUILD_TYPE=${buildType}`,
     `-DCMAKE_TOOLCHAIN_FILE="${emsdkPath}/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"`,
     `-DCMAKE_PREFIX_PATH="${VCPKG_DIR}"`,
@@ -159,9 +160,8 @@ try {
     });
 
     console.log('Building project...');
-    const buildCommand = generator === 'Ninja' ? ninjaPath : 'make';
     
-    execSync(`emmake ${buildCommand} -j${require('os').cpus().length}`, {
+    execSync(`emmake ${ninjaPath} -j${require('os').cpus().length}`, {
         cwd: BUILD_DIR,
         stdio: 'inherit'
     });
