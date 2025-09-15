@@ -37,13 +37,11 @@ Please refer to the official vcpkg installation guide: https://vcpkg.io/en/getti
 #### Command Line Build
 
 ```bash
-# In the project root directory (tgfx-vcpkg-demo/)
-vcpkg install
-
 # Create build directory
 mkdir build && cd build
 
 # Configure CMake (replace with your vcpkg path)
+# This command will automatically download and install vcpkg third-party libraries
 cmake .. -DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake
 
 # Build project
