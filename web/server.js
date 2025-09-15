@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
-const port = 3001;
+const port = 3000;
 
 const arch = process.argv[2] || 'wasm-mt';
 console.log(`Starting server, architecture mode: ${arch}`);

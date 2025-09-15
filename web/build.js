@@ -34,7 +34,7 @@ function detectTGFXArchitecture() {
         return 'wasm';
     }
     
-    return 'wasm';
+    return 'wasm-mt';
 }
 
 const detectedArch = detectTGFXArchitecture();
@@ -46,19 +46,51 @@ if (arch !== detectedArch) {
 }
 
 console.log('Cleaning build directory...');
-execSync(`rm -rf "${BUILD_DIR}"`, { stdio: 'inherit' });
+if (fs.existsSync(BUILD_DIR)) {
+    fs.rmSync(BUILD_DIR, { recursive: true, force: true });
+}
 fs.mkdirSync(BUILD_DIR, { recursive: true });
 
 const buildType = debug ? 'Debug' : 'Release';
 const usePthreads = arch === 'wasm-mt';
-const emsdkPath = process.env.EMSDK || '/Users/huangbeiao/Documents/emsdk';
+const emsdkPath = process.env.EMSDK;
+
+function findNodeExecutable() {
+    if (!emsdkPath) {
+        return 'node';
+    }
+    
+    const nodeDir = path.join(emsdkPath, 'node');
+    if (!fs.existsSync(nodeDir)) {
+        return 'node';
+    }
+    
+    try {
+        const nodeDirs = fs.readdirSync(nodeDir).filter(dir => 
+            dir.includes('_64bit') && fs.statSync(path.join(nodeDir, dir)).isDirectory()
+        );
+        
+        if (nodeDirs.length > 0) {
+            const nodeExecutable = path.join(nodeDir, nodeDirs[0], 'bin', 'node');
+            if (fs.existsSync(nodeExecutable)) {
+                return nodeExecutable;
+            }
+        }
+    } catch (error) {
+        console.warn('Warning: Could not detect EMSDK node version, using system node');
+    }
+    
+    return 'node';
+}
+
+const nodeExecutable = findNodeExecutable();
 
 const cmakeArgs = [
     `-DCMAKE_BUILD_TYPE=${buildType}`,
     `-DCMAKE_TOOLCHAIN_FILE="${emsdkPath}/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"`,
     `-DCMAKE_PREFIX_PATH="${VCPKG_DIR}"`,
     `-DUSE_PTHREADS=${usePthreads ? 'ON' : 'OFF'}`,
-    `-DCMAKE_CROSSCOMPILING_EMULATOR="${emsdkPath}/node/20.18.0_64bit/bin/node"`
+    `-DCMAKE_CROSSCOMPILING_EMULATOR="${nodeExecutable}"`
 ];
 
 try {
@@ -79,7 +111,7 @@ try {
     console.log(`Mode: ${buildType}`);
     console.log(`Files: build/tgfx-web-demo.js, build/tgfx-web-demo.wasm`);
     console.log('Run: npm run server:mt');
-    console.log('Access: http://localhost:3001');
+    console.log('Access: http://localhost:3000');
 
 } catch (error) {
     console.error('Build failed:', error.message);
