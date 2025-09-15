@@ -67,13 +67,28 @@ function findNodeExecutable() {
     
     try {
         const nodeDirs = fs.readdirSync(nodeDir).filter(dir => 
-            dir.includes('_64bit') && fs.statSync(path.join(nodeDir, dir)).isDirectory()
+            fs.statSync(path.join(nodeDir, dir)).isDirectory()
         );
         
-        if (nodeDirs.length > 0) {
-            const nodeExecutable = path.join(nodeDir, nodeDirs[0], 'bin', 'node');
-            if (fs.existsSync(nodeExecutable)) {
-                return nodeExecutable;
+        // Sort to get the latest version first
+        nodeDirs.sort().reverse();
+        
+        for (const nodeVersionDir of nodeDirs) {
+            const nodeVersionPath = path.join(nodeDir, nodeVersionDir);
+            
+            // Try different possible node executable paths for cross-platform compatibility
+            const possiblePaths = [
+                path.join(nodeVersionPath, 'bin', 'node'),           // Unix/Linux/macOS
+                path.join(nodeVersionPath, 'bin', 'node.exe'),       // Windows with bin dir
+                path.join(nodeVersionPath, 'node.exe'),              // Windows direct
+                path.join(nodeVersionPath, 'node')                   // Unix direct
+            ];
+            
+            for (const nodePath of possiblePaths) {
+                if (fs.existsSync(nodePath)) {
+                    console.log(`Found EMSDK node: ${nodePath}`);
+                    return nodePath;
+                }
             }
         }
     } catch (error) {
