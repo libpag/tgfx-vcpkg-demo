@@ -1,21 +1,19 @@
-if(NOT DEFINED TGFX_GIT_EXECUTABLE)
-    if(CMAKE_HOST_WIN32)
-        set(ORIGINAL_PATH "$ENV{PATH}")
+if(VCPKG_TARGET_IS_WINDOWS)
+    set(ORIGINAL_PATH "$ENV{PATH}")
+    
+    execute_process(
+        COMMAND powershell -Command "[Environment]::GetEnvironmentVariable('PATH', 'Machine') + ';' + [Environment]::GetEnvironmentVariable('PATH', 'User')"
+        OUTPUT_VARIABLE FULL_SYSTEM_PATH
+        ERROR_QUIET
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
         
-        execute_process(
-            COMMAND powershell -Command "[Environment]::GetEnvironmentVariable('PATH', 'Machine') + ';' + [Environment]::GetEnvironmentVariable('PATH', 'User')"
-            OUTPUT_VARIABLE FULL_SYSTEM_PATH
-            ERROR_QUIET
-            OUTPUT_STRIP_TRAILING_WHITESPACE
-        )
-        
-        if(NOT FULL_SYSTEM_PATH)
-            message(FATAL_ERROR "Failed to retrieve system PATH using PowerShell. Git detection cannot proceed.")
-        endif()
-        
-        set(COMBINED_PATH "${ORIGINAL_PATH};${FULL_SYSTEM_PATH}")
-        set(ENV{PATH} "${COMBINED_PATH}")
+    if(NOT FULL_SYSTEM_PATH)
+        message(FATAL_ERROR "Failed to retrieve system PATH using PowerShell. Git detection cannot proceed.")
     endif()
+        
+    set(COMBINED_PATH "${ORIGINAL_PATH};${FULL_SYSTEM_PATH}")
+    set(ENV{PATH} "${COMBINED_PATH}")
 endif()
 
 function(build_tgfx_single_config SOURCE_PATH NODEJS OUTPUT_DIR IS_DEBUG)
