@@ -16,14 +16,47 @@ const BUILD_DIR = path.join(PROJECT_ROOT, 'build');
 const DEMO_DIR = path.join(PROJECT_ROOT, 'demo');
 const VCPKG_DIR = path.join(PROJECT_ROOT, 'vcpkg_installed', 'wasm32-emscripten');
 
-try {
-    const emccVersion = execSync('emcc --version', { encoding: 'utf8' }).split('\n')[0];
-    console.log(`Emscripten version: ${emccVersion}`);
-} catch (error) {
-    console.error('Error: Emscripten not found, please install and configure EMSDK');
+function detectEmscriptenAndEMSDK() {
+    let emccVersion;
+    let emsdkPath;
+    
+    try {
+        emccVersion = execSync('emcc --version', { encoding: 'utf8' }).split('\n')[0];
+        console.log(`Emscripten version: ${emccVersion}`);
+    } catch (error) {
+        console.error('Error: Emscripten not found, please install and configure EMSDK');
+        console.error('Reference: https://emscripten.org/docs/getting_started/downloads.html');
+        process.exit(1);
+    }
+    
+    emsdkPath = process.env.EMSDK;
+    if (emsdkPath && fs.existsSync(emsdkPath)) {
+        console.log(`Found EMSDK path from environment: ${emsdkPath}`);
+        return emsdkPath;
+    }
+    
+    try {
+        const emccPath = execSync('which emcc', { encoding: 'utf8' }).trim();
+        if (emccPath) {
+            const possibleEmsdkPath = path.resolve(emccPath, '../../../');
+            
+            if (fs.existsSync(possibleEmsdkPath)) {
+                console.log(`Derived EMSDK path from emcc location: ${possibleEmsdkPath}`);
+                return possibleEmsdkPath;
+            }
+        }
+    } catch (error) {
+    }
+    
+    console.error('Error: Could not locate EMSDK installation directory');
+    console.error('Please ensure EMSDK is properly installed and either:');
+    console.error('1. Set the EMSDK environment variable, or');
+    console.error('2. Install EMSDK in a standard location');
     console.error('Reference: https://emscripten.org/docs/getting_started/downloads.html');
     process.exit(1);
 }
+
+const emsdkPath = detectEmscriptenAndEMSDK();
 
 function detectTGFXArchitecture() {
     const libDir = path.join(VCPKG_DIR, 'lib');
@@ -53,7 +86,6 @@ fs.mkdirSync(BUILD_DIR, { recursive: true });
 
 const buildType = debug ? 'Debug' : 'Release';
 const usePthreads = arch === 'wasm-mt';
-const emsdkPath = process.env.EMSDK;
 
 function findNodeExecutable() {
     if (!emsdkPath) {
@@ -118,22 +150,6 @@ function findVcpkgNinja() {
     if (fs.existsSync(ninjaPath)) {
         console.log(`Using vcpkg ninja: ${ninjaPath}`);
         return ninjaPath;
-    }
-    
-    // Fallback: try to find ninja in any available triplet
-    const vcpkgInstalledDir = path.join(PROJECT_ROOT, 'vcpkg_installed');
-    if (fs.existsSync(vcpkgInstalledDir)) {
-        const triplets = fs.readdirSync(vcpkgInstalledDir).filter(dir => 
-            fs.statSync(path.join(vcpkgInstalledDir, dir)).isDirectory() && dir !== 'vcpkg'
-        );
-        
-        for (const fallbackTriplet of triplets) {
-            const fallbackNinjaPath = path.join(vcpkgInstalledDir, fallbackTriplet, 'tools', 'ninja', ninjaExecutable);
-            if (fs.existsSync(fallbackNinjaPath)) {
-                console.log(`Using vcpkg ninja from ${fallbackTriplet}: ${fallbackNinjaPath}`);
-                return fallbackNinjaPath;
-            }
-        }
     }
     
     console.warn('Warning: vcpkg ninja not found, falling back to system ninja');

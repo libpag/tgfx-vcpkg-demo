@@ -20,6 +20,21 @@ We are considering full vcpkg adaptation in future releases to provide a more st
 
 Please refer to the official vcpkg installation guide: https://vcpkg.io/en/getting-started.html
 
+**Important:** After installing vcpkg, you need to add it to your system PATH or set it as a temporary environment variable:
+
+**Option 1: Add to System PATH (Recommended)**
+- **Windows**: Add the vcpkg installation directory to your system PATH environment variable
+- **macOS/Linux**: Add `export PATH="/path/to/vcpkg:$PATH"` to your shell profile (`.bashrc`, `.zshrc`, etc.)
+
+**Option 2: Temporary Environment Variable**
+```bash
+# Set temporary environment variable (replace with your vcpkg path)
+export VCPKG_ROOT=/path/to/vcpkg
+export PATH="$VCPKG_ROOT:$PATH"
+```
+
+This ensures that the `vcpkg` command is available globally in your terminal.
+
 ## Platform-Specific Build Instructions
 
 ### macOS Platform
@@ -75,12 +90,18 @@ After running the cmake command, a `demo.sln` solution file will be generated. O
 
 ### Web Platform
 
-**Prerequisites:** Install TGFX using vcpkg in the web directory:
-```bash
-# Navigate to web directory and install TGFX
-cd web
-vcpkg install --triplet=wasm32-emscripten
-```
+**Prerequisites:** 
+
+1. **Install Emscripten SDK (EMSDK)**
+
+   For detailed installation instructions, refer to: https://emscripten.org/docs/getting_started/downloads.html
+
+2. **Install TGFX using vcpkg in the web directory:**
+   ```bash
+   # Navigate to web directory and install TGFX
+   cd web
+   vcpkg install --triplet=wasm32-emscripten
+   ```
 
 **Note:** By default, TGFX builds with multi-threading support (wasm-mt). To build single-threaded TGFX instead, modify `ports/tgfx/tgfx-functions.cmake` line 38 from `set(ARCH "wasm-mt")` to `set(ARCH "wasm")` before running `vcpkg install`.
 
