@@ -14,6 +14,28 @@ This hybrid approach allows us to leverage vcpkg's source management capabilitie
 
 We are considering full vcpkg adaptation in future releases to provide a more standardized integration experience.
 
+## Updating TGFX Version
+
+To update the TGFX version used in this project, you need to modify the `ports/tgfx/portfile.cmake` file:
+
+1. **Find the target commit** in the [TGFX repository](https://github.com/Tencent/tgfx)
+2. **Update the REF field** with the new commit hash:
+   ```cmake
+   vcpkg_from_github(
+       OUT_SOURCE_PATH SOURCE_PATH
+       REPO Tencent/tgfx
+       REF your_new_commit_hash_here
+       SHA512 # This will be updated in the next step
+   )
+   ```
+3. **Calculate the new SHA512**:
+   - Temporarily set `SHA512` to `0` or remove the line
+   - Run `vcpkg install --triplet=your-target-triplet`
+   - vcpkg will fail and display the correct SHA512 hash in the error message
+   - Copy the correct SHA512 hash back to the `portfile.cmake`
+
+This ensures that vcpkg can verify the integrity of the downloaded TGFX source code.
+
 ## Prerequisites
 
 ### Download and Install vcpkg
@@ -22,7 +44,7 @@ Please refer to the official vcpkg installation guide: https://vcpkg.io/en/getti
 
 **Important:** After installing vcpkg, you need to add it to your system PATH or set it as a temporary environment variable:
 
-**Option 1: Add to System PATH (Recommended)**
+**Option 1: Add to System PATH**
 - **Windows**: Add the vcpkg installation directory to your system PATH environment variable
 - **macOS/Linux**: Add `export PATH="/path/to/vcpkg:$PATH"` to your shell profile (`.bashrc`, `.zshrc`, etc.)
 
@@ -97,13 +119,42 @@ After running the cmake command, a `demo.sln` solution file will be generated. O
    For detailed installation instructions, refer to: https://emscripten.org/docs/getting_started/downloads.html
 
 2. **Install TGFX using vcpkg in the web directory:**
+   
+   TGFX supports both single-threaded and multi-threaded WebAssembly builds.
+   
    ```bash
-   # Navigate to web directory and install TGFX
+   # Navigate to web directory
    cd web
+   
+   # Default: Multi-threaded WebAssembly version
    vcpkg install --triplet=wasm32-emscripten
    ```
-
-**Note:** By default, TGFX builds with multi-threading support (wasm-mt). To build single-threaded TGFX instead, modify `ports/tgfx/tgfx-functions.cmake` line 38 from `set(ARCH "wasm-mt")` to `set(ARCH "wasm")` before running `vcpkg install`.
+   
+   **To use different threading modes**, modify the `web/vcpkg.json` file:
+   
+   ```json
+   // For multi-threaded version (default)
+   {
+     "dependencies": [
+       {
+         "name": "tgfx",
+         "features": ["wasm-mt"]
+       }
+     ]
+   }
+   
+   // For single-threaded version
+   {
+     "dependencies": [
+       {
+         "name": "tgfx",
+         "features": ["wasm-st"]
+       }
+     ]
+   }
+   ```
+   
+   **Note**: In vcpkg CLASSIC mode, you can use: `vcpkg install tgfx[wasm-st] --triplet=wasm32-emscripten` or `vcpkg install tgfx[wasm-mt] --triplet=wasm32-emscripten`.
 
 To build and run the web demo:
 

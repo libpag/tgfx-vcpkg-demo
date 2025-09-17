@@ -26,5 +26,15 @@
       "host": true
     }
   ],
+  "features": {
+    "wasm-st": {
+      "description": "Build single-threaded WebAssembly version (wasm). Only applicable for wasm32-emscripten triplet.",
+      "supports": "wasm32 & emscripten"
+    },
+    "wasm-mt": {
+      "description": "Build multi-threaded WebAssembly version (wasm-mt). This is the default for wasm32-emscripten triplet.",
+      "supports": "wasm32 & emscripten"
+    }
+  },
   "supports": "!uwp"
 }
