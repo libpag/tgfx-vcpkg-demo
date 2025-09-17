@@ -1,6 +1,6 @@
 # Introduction
 
-This repository demonstrates how to integrate the TGFX graphics library using vcpkg for offline dependency management. TGFX is Tencent's open-source lightweight 2D graphics library that provides high-performance cross-platform rendering for text, geometries, and images.
+This repository demonstrates how to integrate the [TGFX](https://github.com/Tencent/tgfx) graphics library using vcpkg for offline dependency management. TGFX is Tencent's open-source lightweight 2D graphics library that provides high-performance cross-platform rendering for text, geometries, and images.
 
 ## TGFX vcpkg Integration Approach
 
