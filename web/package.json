@@ -7,12 +7,10 @@
     "clean": "node -e \"const fs=require('fs'); ['build','dist','demo/build'].forEach(d=>{if(fs.existsSync(d))fs.rmSync(d,{recursive:true,force:true})})\"",
     "build": "node build.js --arch=wasm-mt",
     "build:st": "node build.js --arch=wasm",
-    "build:mt": "node build.js --arch=wasm-mt",
     "build:debug": "node build.js --arch=wasm-mt --debug",
     "build:st:debug": "node build.js --arch=wasm --debug",
     "server": "node server.js wasm-mt",
-    "server:st": "node server.js wasm",
-    "server:mt": "node server.js wasm-mt"
+    "server:st": "node server.js wasm"
   },
   "dependencies": {
     "express": "^4.18.2"

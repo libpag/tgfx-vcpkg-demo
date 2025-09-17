@@ -178,7 +178,7 @@ npm run server
 
 # Alternative server options:
 # npm run server:st     # Serve single-threaded build
-# npm run server:mt     # Serve multi-threaded build
+# npm run server        # Serve multi-threaded build
 ```
 
 Open your browser and navigate to `http://localhost:3000` to view the demo.

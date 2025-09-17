@@ -28,7 +28,7 @@
   ],
   "features": {
     "wasm-st": {
-      "description": "Build single-threaded WebAssembly version (wasm). Only applicable for wasm32-emscripten triplet.",
+      "description": "Build single-threaded WebAssembly version (wasm-st). Only applicable for wasm32-emscripten triplet.",
       "supports": "wasm32 & emscripten"
     },
     "wasm-mt": {
