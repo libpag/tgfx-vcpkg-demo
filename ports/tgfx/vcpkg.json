@@ -27,13 +27,63 @@
     }
   ],
   "features": {
-    "wasm-st": {
-      "description": "Build single-threaded WebAssembly version (wasm-st). Only applicable for wasm32-emscripten triplet.",
-      "supports": "wasm32 & emscripten"
+    "svg": {
+      "description": "Enable building the SVG module"
     },
-    "wasm-mt": {
-      "description": "Build multi-threaded WebAssembly version (wasm-mt). This is the default for wasm32-emscripten triplet.",
-      "supports": "wasm32 & emscripten"
+    "pdf": {
+      "description": "Enable building the PDF module"
+    },
+    "layers": {
+      "description": "Enable building the layers module"
+    },
+    "tests": {
+      "description": "Enable building tgfx test targets"
+    },
+    "framework": {
+      "description": "Enable building framework",
+      "supports": "osx | ios"
+    },
+    "qt": {
+      "description": "Enable building with the Qt framework"
+    },
+    "swiftshader": {
+      "description": "Enable building with the SwiftShader library"
+    },
+    "angle": {
+      "description": "Enable building with the ANGLE library"
+    },
+    "no-opengl": {
+      "description": "Disable OpenGL as the GPU backend"
+    },
+    "no-threads": {
+      "description": "Disable support for multithreaded rendering"
+    },
+    "freetype": {
+      "description": "Use Freetype as the vector backend"
+    },
+    "inspector": {
+      "description": "Enable profiling support for the TGFX Inspector tool"
+    },
+    "png-decode": {
+      "description": "Enable embedded PNG decoding support"
+    },
+    "png-encode": {
+      "description": "Enable embedded PNG encoding support"
+    },
+    "jpeg-decode": {
+      "description": "Enable embedded JPEG decoding support"
+    },
+    "jpeg-encode": {
+      "description": "Enable embedded JPEG encoding support"
+    },
+    "webp-decode": {
+      "description": "Enable embedded WEBP decoding support"
+    },
+    "webp-encode": {
+      "description": "Enable embedded WEBP encoding support"
+    },
+    "text-gamma-correction": {
+      "description": "Enable gamma correction when rendering text"
     }
   },
   "supports": "!uwp"

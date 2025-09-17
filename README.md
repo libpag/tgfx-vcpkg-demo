@@ -4,37 +4,7 @@ This repository demonstrates how to integrate the TGFX graphics library using vc
 
 ## TGFX vcpkg Integration Approach
 
-**Important Note:** This project uses a special approach for TGFX integration with vcpkg that differs from standard vcpkg usage:
-
-- **vcpkg Role**: Used solely for fetching TGFX source code, not for TGFX dependency management
-- **Third-party Dependencies**: Managed using the [depsync](https://github.com/domchen/depsync) tool instead of vcpkg
-- **Build System**: TGFX and its dependencies are compiled using the [vendor_tools](https://github.com/libpag/vendor_tools) build system
-
-This hybrid approach allows us to leverage vcpkg's source management capabilities while maintaining control over the dependency resolution and build process through specialized tools designed for TGFX's requirements.
-
-We are considering full vcpkg adaptation in future releases to provide a more standardized integration experience.
-
-## Updating TGFX Version
-
-To update the TGFX version used in this project, you need to modify the `ports/tgfx/portfile.cmake` file:
-
-1. **Find the target commit** in the [TGFX repository](https://github.com/Tencent/tgfx)
-2. **Update the REF field** with the new commit hash:
-   ```cmake
-   vcpkg_from_github(
-       OUT_SOURCE_PATH SOURCE_PATH
-       REPO Tencent/tgfx
-       REF your_new_commit_hash_here
-       SHA512 # This will be updated in the next step
-   )
-   ```
-3. **Calculate the new SHA512**:
-   - Temporarily set `SHA512` to `0` or remove the line
-   - Run `vcpkg install --triplet=your-target-triplet`
-   - vcpkg will fail and display the correct SHA512 hash in the error message
-   - Copy the correct SHA512 hash back to the `portfile.cmake`
-
-This ensures that vcpkg can verify the integrity of the downloaded TGFX source code.
+**Important Note:** This project uses vcpkg only for fetching TGFX source code, while dependencies are managed by [depsync](https://github.com/domchen/depsync) and built using [vendor_tools](https://github.com/libpag/vendor_tools). This hybrid approach provides better control over TGFX's specialized build requirements compared to standard vcpkg dependency management.
 
 ## Prerequisites
 
@@ -42,175 +12,91 @@ This ensures that vcpkg can verify the integrity of the downloaded TGFX source c
 
 Please refer to the official vcpkg installation guide: https://vcpkg.io/en/getting-started.html
 
-**Important:** After installing vcpkg, you need to add it to your system PATH or set it as a temporary environment variable:
+## Updating TGFX Version
 
-**Option 1: Add to System PATH**
-- **Windows**: Add the vcpkg installation directory to your system PATH environment variable
-- **macOS/Linux**: Add `export PATH="/path/to/vcpkg:$PATH"` to your shell profile (`.bashrc`, `.zshrc`, etc.)
+This project currently uses the latest TGFX version by default. To update to a specific TGFX version, you have two options:
 
-**Option 2: Temporary Environment Variable**
-```bash
-# Set temporary environment variable (replace with your vcpkg path)
-export VCPKG_ROOT=/path/to/vcpkg
-export PATH="$VCPKG_ROOT:$PATH"
-```
+### Method 1: Using the Update Script (Recommended)
 
-This ensures that the `vcpkg` command is available globally in your terminal.
-
-## Platform-Specific Build Instructions
-
-### macOS Platform
-
-#### Building with CLion (Recommended)
-
-1. **CLion with Vcpkg integration**  
-   Please refer to the official CLion documentation for configuring vcpkg integration: https://www.jetbrains.com/help/clion/package-management.html
-
-2. **Build and Run**
-   1. CLion will automatically detect CMakeLists.txt and begin configuration
-   2. Wait for vcpkg to download and build TGFX dependencies (initial build may take considerable time)
-   3. Once build is complete, click the run button to execute the demo
-
-#### Command Line Build
+Use the provided script in this project root directory to automatically update the portfile:
 
 ```bash
-# Create build directory
-mkdir build && cd build
+# Find the commit hash for your target version in TGFX repository
+# Then run the update script with the commit hash
+node update-tgfx-commit.js <commit-hash>
 
-# Configure CMake (replace with your vcpkg path)
-# This command will automatically download and install vcpkg third-party libraries
-cmake .. -DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake
-
-# Build project
-cmake --build .
-
-# Run demo
-./demo
+# Example: Update to a specific commit
+node update-tgfx-commit.js 6095b909b1109d4910991a034405f4ae30d6786f
 ```
 
-### Windows Platform
+The script will automatically download the source code, calculate the SHA512 hash, and update the `ports/tgfx/portfile.cmake` file.
 
-#### Visual Studio Build
+### Method 2: Download from Official Releases
 
-```cmd
-:: Create build directory
-mkdir build
-cd build
+1. Visit the [TGFX releases page](https://github.com/Tencent/tgfx/releases)
+2. Download the corresponding port files for your target version
+3. Replace the files in the `ports/tgfx/` directory with the downloaded versions
 
-:: Configure CMake (replace with your vcpkg path)
-:: This command will automatically download and install vcpkg third-party libraries
-cmake .. -DCMAKE_TOOLCHAIN_FILE=C:\path\to\vcpkg\scripts\buildsystems\vcpkg.cmake
+## Using TGFX with vcpkg
 
-:: Optional: Specify architecture and build type
-:: cmake .. -DCMAKE_TOOLCHAIN_FILE=C:\path\to\vcpkg\scripts\buildsystems\vcpkg.cmake -A x64 -DCMAKE_BUILD_TYPE=Release
-:: cmake .. -DCMAKE_TOOLCHAIN_FILE=C:\path\to\vcpkg\scripts\buildsystems\vcpkg.cmake -A Win32 -DCMAKE_BUILD_TYPE=Debug
+### Port Installation
+
+Before using TGFX through vcpkg, you need to make the custom port available:
+
+1. **Copy the port to vcpkg**: Copy the `ports/tgfx` directory to your vcpkg installation's `ports` directory
+2. **Alternative**: Use overlay ports by specifying `--overlay-ports=./ports` in vcpkg commands
+
+### Installation Methods
+
+vcpkg supports two installation modes for dependency management:
+
+#### Manifest Mode (Recommended for Projects)
+
+Manifest mode provides project-local dependency management through a `vcpkg.json` file:
+
+```json
+{
+  "name": "your-project",
+  "version": "1.0.0",
+  "dependencies": [
+    {
+      "name": "tgfx",
+      "features": ["svg", "pdf"]
+    }
+  ]
+}
 ```
 
-**Important:** Ensure that the Visual Studio toolchain used to build TGFX matches the toolchain used to build the Windows demo. Mismatched toolchains will result in linking errors.
+Install dependencies locally to your project:
+```bash
+vcpkg install --triplet=x64-osx
+```
 
-After running the cmake command, a `demo.sln` solution file will be generated. Open this file in Visual Studio and build the project to generate the executable file.
+#### Classic Mode
 
-### Web Platform
-
-**Prerequisites:** 
-
-1. **Install Emscripten SDK (EMSDK)**
-
-   For detailed installation instructions, refer to: https://emscripten.org/docs/getting_started/downloads.html
-
-2. **Install TGFX using vcpkg in the web directory:**
-   
-   TGFX supports both single-threaded and multi-threaded WebAssembly builds.
-   
-   ```bash
-   # Navigate to web directory
-   cd web
-   
-   # Default: Multi-threaded WebAssembly version
-   vcpkg install --triplet=wasm32-emscripten
-   ```
-   
-   **To use different threading modes**, modify the `web/vcpkg.json` file:
-   
-   ```json
-   // For multi-threaded version (default)
-   {
-     "dependencies": [
-       {
-         "name": "tgfx",
-         "features": ["wasm-mt"]
-       }
-     ]
-   }
-   
-   // For single-threaded version
-   {
-     "dependencies": [
-       {
-         "name": "tgfx",
-         "features": ["wasm-st"]
-       }
-     ]
-   }
-   ```
-   
-   **Note**: In vcpkg CLASSIC mode, you can use: `vcpkg install tgfx[wasm-st] --triplet=wasm32-emscripten` or `vcpkg install tgfx[wasm-mt] --triplet=wasm32-emscripten`.
-
-To build and run the web demo:
+Classic mode installs packages globally for system-wide access:
 
 ```bash
-# Navigate to web directory
-cd web
+# Basic installation
+vcpkg install tgfx
 
-# Install dependencies
-npm install
+# Install with specific features
+vcpkg install tgfx[svg,pdf] --triplet=x64-osx
 
-# Build for multi-threaded WebAssembly (recommended)
-npm run build
-
-# Alternative build options:
-# npm run build:st      # Single-threaded WebAssembly
-# npm run build:debug   # Debug build with multi-threading
-# npm run build:st:debug # Debug build with single-threading
-
-# Start development server
-npm run server
-
-# Alternative server options:
-# npm run server:st     # Serve single-threaded build
-# npm run server        # Serve multi-threaded build
+# WebAssembly single-threaded build example
+vcpkg install tgfx[no-threads] --triplet=wasm32-emscripten
 ```
 
-Open your browser and navigate to `http://localhost:3000` to view the demo.
+### Available Features
 
-### OHOS Platform (HarmonyOS)
+TGFX supports various optional features that can be enabled during installation:
 
-**Prerequisites:** Install TGFX using vcpkg in the OHOS directory:
-```bash
-# Navigate to OHOS directory and install TGFX
-cd ohos
-vcpkg install --triplet=arm64-ohos
-# Using "vcpkg install tgfx:x64-ohos" for x64 architecture
-```
+- **Core Features**: `svg`, `pdf`, `layers`, `tests`, `framework`
+- **Rendering Backends**: `qt`, `swiftshader`, `angle`
+- **Image Formats**: `png-decode`, `png-encode`, `jpeg-decode`, `jpeg-encode`, `webp-decode`, `webp-encode`
+- **System Options**: `no-opengl`, `no-threads`, `freetype`, `inspector`, `text-gamma-correction`
 
-**Note:** By default, the OHOS demo uses ARM64 architecture. To build for x64 architecture instead:
-1. Install x64 TGFX: `vcpkg install --triplet=x64-ohos`
-2. Modify `ohos/demo/build-profile.json5` and change `"abiFilters": ["arm64-v8a"]` to `"abiFilters": ["x86-64"]`
-
-#### Building with DevEco Studio
-
-1. **Install DevEco Studio**  
-   Download and install DevEco Studio from the official HarmonyOS developer website: https://developer.harmonyos.com/en/develop/deveco-studio
-
-2. **Open Project**
-   1. Launch DevEco Studio
-   2. Open the `ohos` directory as a project
-   3. Wait for the IDE to sync and configure the project
-
-3. **Build and Run**
-   1. Connect a HarmonyOS device or start an emulator
-   2. Click the "Run" button in DevEco Studio
-   3. The demo will be built and deployed to your device/emulator
+Refer to `ports/tgfx/vcpkg.json` for the complete feature list and descriptions.
 
 ## Project Structure
 
