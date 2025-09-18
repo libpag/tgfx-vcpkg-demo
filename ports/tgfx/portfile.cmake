@@ -68,22 +68,8 @@ endif()
 get_filename_component(NINJA_DIR "${NINJA}" DIRECTORY )
 vcpkg_add_to_path(PREPEND "${NINJA_DIR}")
 
-set(TGFX_WEB_ARCH "")
-if(VCPKG_TARGET_TRIPLET STREQUAL "wasm32-emscripten")
-    if("wasm-st" IN_LIST FEATURES)
-        set(TGFX_WEB_ARCH "wasm-st")
-        message(STATUS "Building single-threaded WebAssembly version (wasm)")
-    elseif("wasm-mt" IN_LIST FEATURES)
-        set(TGFX_WEB_ARCH "wasm-mt")
-        message(STATUS "Building multi-threaded WebAssembly version (wasm-mt)")
-    else()
-        set(TGFX_WEB_ARCH "wasm-mt")
-        message(STATUS "Building default multi-threaded WebAssembly version (wasm-mt)")
-    endif()
-endif()
-
 message(STATUS "Building TGFX using vendor_tools...")
-build_tgfx_with_vendor_tools("${SOURCE_PATH}" "${NODEJS}" "${TGFX_WEB_ARCH}")
+build_tgfx_with_vendor_tools("${SOURCE_PATH}" "${NODEJS}")
 
 file(INSTALL "${SOURCE_PATH}/include/"
      DESTINATION "${CURRENT_PACKAGES_DIR}/include"

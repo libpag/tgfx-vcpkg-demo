@@ -4,8 +4,7 @@
   "description": "TGFX Web Demo for Emscripten",
   "dependencies": [
     {
-      "name": "tgfx",
-      "features": ["wasm-mt"]
+      "name": "tgfx"
     }
   ]
 }
