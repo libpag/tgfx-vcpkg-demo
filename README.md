@@ -39,7 +39,19 @@ This ensures that the `vcpkg` command is available globally in your terminal.
 
 To use the TGFX port files, you need to **download** any TGFX port files of v2.0.0 or above from [TGFX release](https://github.com/Tencent/tgfx/releases).
 
-Then you need to replace the downloaded ports folder with the [ports folder](https://github.com/libpag/tgfx-vcpkg-demo/tree/main/ports) in root directory of the demo.
+Then you need to put the downloaded ports folder in the root directory of the demo.
+
+After the above operations are completed, the port file structure in the demo project should be as follows:
+```
+tgfx-vcpkg-demo/
+└── ports/                      # Custom vcpkg ports
+    └── tgfx/                   # TGFX port configuration
+        ├── portfile.cmake      # Port build script
+        ├── vcpkg.json          # Port dependency configuration
+        ├── usage               # Usage instructions
+        ├── scripts/            # Build scripts
+        └── triplets/           # Platform configurations
+```
 
 ## Platform-Specific Build Instructions
 
@@ -221,17 +233,10 @@ tgfx-vcpkg-demo/
 │   ├── build.js                # Web build script
 │   ├── server.js               # Development server
 │   └── demo/                   # Web demo source code
-├── ohos/                       # OHOS platform project
-│   ├── demo/                   # OHOS demo application
-│   ├── hvigorfile.ts           # OHOS build configuration
-│   └── build-profile.json5     # OHOS build profile
-└── ports/                      # Custom vcpkg ports
-    └── tgfx/                   # TGFX port configuration
-        ├── portfile.cmake      # Port build script
-        ├── vcpkg.json          # Port dependency configuration
-        ├── usage               # Usage instructions
-        ├── scripts/            # Build scripts
-        └── triplets/           # Platform configurations
+└── ohos/                       # OHOS platform project
+     ├── demo/                   # OHOS demo application
+     ├── hvigorfile.ts           # OHOS build configuration
+     └── build-profile.json5     # OHOS build profile
 ```
 
 ## Getting Help
