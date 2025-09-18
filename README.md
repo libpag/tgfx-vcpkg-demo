@@ -16,26 +16,29 @@ Please refer to the official vcpkg installation guide: https://vcpkg.io/en/getti
 
 This project currently uses the latest TGFX version by default. To update to a specific TGFX version, you have two options:
 
-### Method 1: Using the Update Script (Recommended)
-
-Use the provided script in this project root directory to automatically update the portfile:
-
-```bash
-# Find the commit hash for your target version in TGFX repository
-# Then run the update script with the commit hash
-node update-tgfx.js <commit-hash>
-
-# Example: Update to a specific commit
-node update-tgfx.js 6095b909b1109d4910991a034405f4ae30d6786f
-```
-
-The script will automatically download the source code, calculate the SHA512 hash, and update the `ports/tgfx/portfile.cmake` file.
-
-### Method 2: Download from Official Releases
+### Method 1: Download from Official Releases (Recommended)
 
 1. Visit the [TGFX releases page](https://github.com/Tencent/tgfx/releases)
 2. Download the corresponding port files for your target version
 3. Replace the files in the `ports/tgfx/` directory with the downloaded versions
+
+### Method 2: Using the Update Script
+
+Use the provided script in this project root directory to automatically update the portfile:
+
+
+Find the commit hash for your target version in TGFX repository
+Then run the update script with the commit hash
+```bash
+node update-tgfx.js <commit-hash>
+```
+
+Example: Update to a specific commit
+```bash
+node update-tgfx.js 6095b909b1109d4910991a034405f4ae30d6786f
+```
+
+The script will automatically download the source code, calculate the SHA512 hash, and update the `ports/tgfx/portfile.cmake` file.
 
 ## Using TGFX with vcpkg
 
@@ -61,7 +64,7 @@ Manifest mode provides project-local dependency management through a `vcpkg.json
   "dependencies": [
     {
       "name": "tgfx",
-      "features": ["svg", "pdf"]
+      "features": ["enable-svg", "enable-pdf"]
     }
   ]
 }
@@ -89,14 +92,7 @@ vcpkg install tgfx[no-threads] --triplet=wasm32-emscripten
 
 ### Available Features
 
-TGFX supports various optional features that can be enabled during installation:
-
-- **Core Features**: `svg`, `pdf`, `framework`
-- **Rendering Backends**: `qt`, `swiftshader`, `angle`
-- **Image Formats**: `png-decode`, `png-encode`, `jpeg-decode`, `jpeg-encode`, `webp-decode`, `webp-encode`
-- **System Options**: `no-opengl`, `no-threads`, `freetype`, `inspector`, `text-gamma-correction`
-
-Refer to `ports/tgfx/vcpkg.json` for the complete feature list and descriptions.
+Refer to [`ports/tgfx/vcpkg.json`](ports/tgfx/vcpkg.json) for the complete feature list and descriptions.
 
 ## Project Structure
 
@@ -130,7 +126,6 @@ tgfx-vcpkg-demo/
 - [TGFX Official Repository](https://github.com/Tencent/tgfx)
 - [vcpkg Official Documentation](https://vcpkg.io/)
 - [CMake Official Documentation](https://cmake.org/documentation/)
-- [DevEco Studio Documentation](https://developer.harmonyos.com/en/develop/deveco-studio)
 
 ## Contributing
 
