@@ -2,6 +2,7 @@
 .idea/
 .vscode/
 .codebuddy/
+.vs/
 
 # Build directories
 cmake-build-debug/
