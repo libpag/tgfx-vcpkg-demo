@@ -64,7 +64,7 @@ Manifest mode provides project-local dependency management through a `vcpkg.json
   "dependencies": [
     {
       "name": "tgfx",
-      "features": ["enable-svg", "enable-pdf", "enable-opengl", "enable-threads"]
+      "features": ["svg", "pdf", "opengl", "threads"]
     }
   ]
 }
@@ -84,10 +84,10 @@ Classic mode installs packages globally for system-wide access:
 vcpkg install tgfx
 
 # Install with specific features
-vcpkg install tgfx[enable-svg,enable-pdf] --triplet=x64-osx
+vcpkg install tgfx[svg,pdf] --triplet=x64-osx
 
 # WebAssembly multi-threaded build example
-vcpkg install tgfx[enable-threads] --triplet=wasm32-emscripten
+vcpkg install tgfx[threads] --triplet=wasm32-emscripten
 ```
 
 ### Available Features
