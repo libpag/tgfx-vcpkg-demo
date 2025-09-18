@@ -5,7 +5,7 @@
   "dependencies": [
     {
       "name":"tgfx",
-      "features": ["pdf", "svg"]
+      "features": ["enable-pdf", "enable-svg"]
     }
     
   ]
