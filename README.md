@@ -79,14 +79,18 @@ vcpkg install --triplet=x64-osx
 
 Classic mode installs packages globally for system-wide access:
 
+Basic installation:
 ```bash
-# Basic installation
 vcpkg install tgfx
+```
 
-# Install with specific features
+Install with specific features:
+```bash
 vcpkg install tgfx[svg,pdf] --triplet=x64-osx
+```
 
-# WebAssembly multi-threaded build example
+WebAssembly multi-threaded build example:
+```bash
 vcpkg install tgfx[threads] --triplet=wasm32-emscripten
 ```
 
