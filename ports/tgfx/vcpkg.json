@@ -28,12 +28,19 @@
   ],
   "default-features": [
     {
+      "name": "enable-opengl"
+    },
+    {
+      "name": "enable-threads",
+      "platform": "!wasm32"
+    },
+    {
       "name": "enable-freetype",
-      "platform": "!(osx | ios) & !(wasm32 & disable-threads)"
+      "platform": "!(osx | ios | (wasm32 & !enable-threads))"
     },
     {
       "name": "enable-webp-decode",
-      "platform": "ios | wasm32"
+      "platform": "!(android | ohos)"
     },
     {
       "name": "enable-png-decode",
@@ -49,10 +56,6 @@
     },
     {
       "name": "enable-jpeg-encode",
-      "platform": "!(android | ohos) & !(ios | wasm32)"
-    },
-    {
-      "name": "enable-webp-decode",
       "platform": "!(android | ohos) & !(ios | wasm32)"
     },
     {
@@ -80,11 +83,11 @@
     "enable-angle": {
       "description": "Enable building with the ANGLE library"
     },
-    "disable-opengl": {
-      "description": "Disable OpenGL as the GPU backend"
+    "enable-opengl": {
+      "description": "Use OpenGL as the GPU backend"
     },
-    "disable-threads": {
-      "description": "Disable support for multithreaded rendering"
+    "enable-threads": {
+      "description": "Enable support for multithreaded rendering"
     },
     "enable-freetype": {
       "description": "Use Freetype as the vector backend"
