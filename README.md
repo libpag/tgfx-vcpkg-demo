@@ -30,12 +30,12 @@ Use the provided script in this project root directory to automatically update t
 Find the commit hash for your target version in TGFX repository
 Then run the update script with the commit hash
 ```bash
-node update_tgfx <commit-hash>
+./update_tgfx <commit-hash>
 ```
 
 Example: Update to a specific commit
 ```bash
-node update_tgfx 6095b909b1109d4910991a034405f4ae30d6786f
+./update_tgfx 6095b909b1109d4910991a034405f4ae30d6786f
 ```
 
 The script will automatically download the source code, calculate the SHA512 hash, and update the `ports/tgfx/portfile.cmake` file.
@@ -64,7 +64,7 @@ Manifest mode provides project-local dependency management through a `vcpkg.json
   "dependencies": [
     {
       "name": "tgfx",
-      "features": ["enable-svg", "enable-pdf", "enable-opengl", "enable-threads"]
+      "features": ["enable-svg", "enable-pdf", "enable-opengl", "enable-threads", "enable-faster-blur"]
     }
   ]
 }
@@ -84,10 +84,13 @@ Classic mode installs packages globally for system-wide access:
 vcpkg install tgfx
 
 # Install with specific features
-vcpkg install tgfx[enable-svg,enable-pdf] --triplet=x64-osx
+vcpkg install tgfx[enable-svg,enable-pdf,enable-faster-blur] --triplet=x64-osx
 
 # WebAssembly multi-threaded build example
-vcpkg install tgfx[enable-threads] --triplet=wasm32-emscripten
+vcpkg install tgfx[enable-threads,enable-faster-blur] --triplet=wasm32-emscripten
+
+# Web with async promise support
+vcpkg install tgfx[enable-async-promise] --triplet=wasm32-emscripten
 ```
 
 ### Available Features

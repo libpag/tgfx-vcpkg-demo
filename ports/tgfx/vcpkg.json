@@ -39,28 +39,31 @@
       "platform": "!(osx | ios | (wasm32 & !enable-threads))"
     },
     {
+      "name": "enable-faster-blur"
+    },
+    {
       "name": "enable-webp-decode",
-      "platform": "!(android | ohos)"
+      "platform": "ios | wasm32 | (!(android | ohos))"
     },
     {
       "name": "enable-png-decode",
-      "platform": "!(android | ohos) & !(ios | wasm32)"
+      "platform": "!(android | ohos | ios | wasm32)"
     },
     {
       "name": "enable-png-encode",
-      "platform": "!(android | ohos) & !(ios | wasm32)"
+      "platform": "!(android | ohos | ios | wasm32)"
     },
     {
       "name": "enable-jpeg-decode",
-      "platform": "!(android | ohos) & !(ios | wasm32)"
+      "platform": "!(android | ohos | ios | wasm32)"
     },
     {
       "name": "enable-jpeg-encode",
-      "platform": "!(android | ohos) & !(ios | wasm32)"
+      "platform": "!(android | ohos | ios | wasm32)"
     },
     {
       "name": "enable-webp-encode",
-      "platform": "!(android | ohos) & !(ios | wasm32)"
+      "platform": "!(android | ohos | ios | wasm32)"
     }
   ],
   "features": {
@@ -115,6 +118,12 @@
     },
     "enable-text-gamma-correction": {
       "description": "Enable gamma correction when rendering text"
+    },
+    "enable-faster-blur": {
+      "description": "Enable a faster blur algorithm instead of the standard Gaussian blur"
+    },
+    "enable-async-promise": {
+      "description": "Enable async promises for loading images on the web"
     }
   },
   "supports": "!uwp"

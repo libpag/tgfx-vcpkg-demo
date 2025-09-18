@@ -131,6 +131,18 @@ function(build_tgfx_single_config SOURCE_PATH NODEJS OUTPUT_DIR IS_DEBUG)
         list(APPEND BUILD_ARGS -DTGFX_USE_TEXT_GAMMA_CORRECTION=OFF)
     endif()
 
+    if("enable-faster-blur" IN_LIST FEATURES)
+        list(APPEND BUILD_ARGS -DTGFX_USE_FASTER_BLUR=ON)
+    else()
+        list(APPEND BUILD_ARGS -DTGFX_USE_FASTER_BLUR=OFF)
+    endif()
+
+    if("enable-async-promise" IN_LIST FEATURES)
+        list(APPEND BUILD_ARGS -DTGFX_USE_ASYNC_PROMISE=ON)
+    else()
+        list(APPEND BUILD_ARGS -DTGFX_USE_ASYNC_PROMISE=OFF)
+    endif()
+
     if(VCPKG_TARGET_IS_WINDOWS)
         list(APPEND BUILD_ARGS -p win)
     elseif(VCPKG_TARGET_IS_OSX)
