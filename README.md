@@ -23,10 +23,10 @@ Use the provided script in this project root directory to automatically update t
 ```bash
 # Find the commit hash for your target version in TGFX repository
 # Then run the update script with the commit hash
-node update-tgfx-commit.js <commit-hash>
+node update-tgfx.js <commit-hash>
 
 # Example: Update to a specific commit
-node update-tgfx-commit.js 6095b909b1109d4910991a034405f4ae30d6786f
+node update-tgfx.js 6095b909b1109d4910991a034405f4ae30d6786f
 ```
 
 The script will automatically download the source code, calculate the SHA512 hash, and update the `ports/tgfx/portfile.cmake` file.
@@ -91,7 +91,7 @@ vcpkg install tgfx[no-threads] --triplet=wasm32-emscripten
 
 TGFX supports various optional features that can be enabled during installation:
 
-- **Core Features**: `svg`, `pdf`, `layers`, `tests`, `framework`
+- **Core Features**: `svg`, `pdf`, `framework`
 - **Rendering Backends**: `qt`, `swiftshader`, `angle`
 - **Image Formats**: `png-decode`, `png-encode`, `jpeg-decode`, `jpeg-encode`, `webp-decode`, `webp-encode`
 - **System Options**: `no-opengl`, `no-threads`, `freetype`, `inspector`, `text-gamma-correction`

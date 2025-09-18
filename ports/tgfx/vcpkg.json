@@ -33,12 +33,6 @@
     "pdf": {
       "description": "Enable building the PDF module"
     },
-    "layers": {
-      "description": "Enable building the layers module"
-    },
-    "tests": {
-      "description": "Enable building tgfx test targets"
-    },
     "framework": {
       "description": "Enable building framework",
       "supports": "osx | ios"
